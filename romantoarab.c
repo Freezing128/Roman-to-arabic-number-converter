@@ -89,7 +89,7 @@ int romanToArab ( char * c, int len )
     }
     return res; 
 }
-
+/* Prints roman number */
 void printRoman ( char * buff, int len )
 {
   for ( int i = 0; i < len; i++ )
@@ -101,7 +101,7 @@ void printRoman ( char * buff, int len )
   }
 }
 
-
+/* Reads input from stdin */
 int readInput ( char * line, int * len )
 {
   char c;
@@ -133,6 +133,7 @@ int readInput ( char * line, int * len )
   return 1;
 }
 
+/* Main function */
 int main ()
 {  
   int result, len;
