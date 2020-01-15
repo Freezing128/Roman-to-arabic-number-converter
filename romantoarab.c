@@ -55,10 +55,9 @@ int value ( char c )
 * Roman to arabic number converting algorithm
 * Reads char array (string) from stdin and goes through it char by char 
 */
-int romanToArab ( char c [] ) 
+int romanToArab ( char * c, int len ) 
 {   
     int res = 0;
-    int len = strlen ( c );
     for ( int i = 0; i < len ; i++ )
     {   
         /* value of one char from string */
@@ -82,47 +81,74 @@ int romanToArab ( char c [] )
                         so it doesn't recognize number on next position as new one */
             }
         }
-        else /* cyklus je na konci a pricita posledni hodnotu, ktera jeste zbyva */
-        {   res = res + s1;
-            i++;    /* posune se na dalsi hodnotu, 
-                      nicmene protoze i uz je ted vetsi nez delka stringu, cyklus skonci */
+        else /* loop is at the end and adds up the last value that remains */
+        {   
+            res = res + s1;
+            i++;    
         }
     }
     return res; 
 }
 
- int main ()
- {  
-    char buff[blen];
-    int result = 0;
+void printRoman ( char * buff, int len )
+{
+  for ( int i = 0; i < len; i++ )
+  {
+    if ( i == 0 ) 
+        printf ( "Roman: %c", buff[i] ); 
+    else 
+        printf ( "%c", buff[i] );
+  }
+}
 
-    printf ( "Insert roman number with max length of 10 chars: \n" );
-    /* Reading input with fgets */
-    while ( fgets ( buff, blen, stdin ) != NULL ) 
-    {   
-        /* 10 + 1 znak is always '\n' => 11 in if */
-        if ( strlen ( buff ) > 11 ) 
-        { 
-            printf ( "Error! Input longer than 10 chars.\n" ); 
-            return 0;
-        }
-        if ( buff [ strlen ( buff ) - 1 ] == '\n' ) 
-        { 
-            buff [ strlen ( buff ) - 1 ] = '\0'; 
-        }
-        break; 
+
+int readInput ( char * line, int * len )
+{
+  char c;
+  int size = 0, load;
+  while ( 666 )
+  {
+    load = scanf ( "%c", &c );
+    if ( feof ( stdin ) )
+      break;
+    if ( load == 0 || ( c != 'i' && c != 'I'
+                     && c != 'v' && c != 'V' && c != 'x' && c !='X'
+                     && c != 'l' && c != 'L' && c != 'c' && c != 'C'
+                     && c != 'd' && c != 'D' && c != 'm' && c != 'M' && c != '\n' ) )
+    {
+      load = 0;
+      break;
     }
-    
-    /* Prints roman value */
-    int len = strlen ( buff );
-    for ( int i = 0; i < len; i++ ) 
-    {   if ( i == 0 ) 
-            printf ( "Roman:\n%c", buff[i] ); 
-        else 
-            printf ( "%c", buff[i] );
-    }
-    
-    /* Prints arabic value */
-    printf ( "\nArabic: %d\n", romanToArab ( buff ) );
+    if ( size >= blen || c == '\n' )
+      break;
+    line[size] = c;
+    size++;
+  }
+
+  if ( size > 10 || load == 0 )
     return 0;
+  if ( line[size - 1] == '\n' )
+    line[size - 1] == '\0';
+  * len = size;
+  return 1;
+}
+
+int main ()
+{  
+  int result, len;
+  char line [blen];
+
+  printf ( "Insert roman number with max length of 10 chars: \n" );
+  if ( ! readInput ( line, &len ) )
+  {
+    printf ( "Error! Wrong input.\n" ); 
+    return 1;
+  }
+    
+  /* Prints roman value */
+  printRoman ( line, len );
+    
+  /* Prints arabic value */
+  printf ( "\nArabic: %d\n", romanToArab ( line, len ) );
+  return 0;
  }
